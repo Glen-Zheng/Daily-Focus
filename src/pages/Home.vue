@@ -5,6 +5,7 @@ import Items from "../components/Items.vue";
 
 <template>
   <Navbar />
+  <Items />
 </template>
 
 <style scoped></style>
