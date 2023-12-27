@@ -6,6 +6,7 @@ import Calendar from "../pages/Calendar.vue";
 import Vigor from "../pages/Vigor.vue";
 import Music from "../pages/Music.vue";
 import List from "../pages/List.vue";
+import Article from "../pages/SpecificNews.vue";
 
 const routes = [
   {
@@ -22,6 +23,11 @@ const routes = [
     path: "/News",
     name: "News",
     component: News,
+  },
+  {
+    path: "/Article",
+    name: "Article",
+    component: Article,
   },
   {
     path: "/Calendar",

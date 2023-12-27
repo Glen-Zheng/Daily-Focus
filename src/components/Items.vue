@@ -2,79 +2,49 @@
 import { ref } from "vue";
 import axios from "axios";
 import { useStore } from "../store/index.js";
+import { RouterLink } from "vue-router";
 
 const store = useStore();
 
-store.get_news();
-// import { ref } from "vue";
-// import { useStore } from "../store/index.js";
-// import SiteModal from "./SiteModal.vue";
-// import axios from "axios";
+await store.get_news();
+await store.get_weather();
 
-// const showModal = ref(false);
-// const selectedId = ref(0);
-// let genre = ref();
-
-// const openModal = (id) => {
-//   showModal.value = true;
-//   selectedId.value = id;
-// };
-
-// const closeModal = () => {
-//   showModal.value = false;
-// };
-
-// const store = useStore();
-// if (store.moviesOutputted == false) {
-//   await store.selection();
-//   store.outputtedDone();
-// }
-
-// async function nextTrendingPage() {
-//   store.movieSelection = [];
-//   for (let i = 0; i < 3; i++) {
-//     let response = await axios.get(`https://api.themoviedb.org/3/trending/movie/day`, {
-//       params: {
-//         api_key: "da6aeec5bd0d488feeebd8b57deda080",
-//         include_adult: false,
-//         page: store.pageNum,
-//       },
-//     });
-//     for (let movieData of response.data.results) {
-//       store.movieSelection.push({
-//         id: movieData.id,
-//         poster: movieData.poster_path,
-//       });
-//     }
-//     store.pageNum++;
-//   }
-// }
-
-// async function previousTrendingPage() {
-//   store.pageNum -= 6;
-//   store.movieSelection = [];
-//   for (let i = 0; i < 3; i++) {
-//     let response = await axios.get(`https://api.themoviedb.org/3/trending/movie/day`, {
-//       params: {
-//         api_key: "da6aeec5bd0d488feeebd8b57deda080",
-//         include_adult: false,
-//         page: store.pageNum,
-//       },
-//     });
-//     for (let movieData of response.data.results) {
-//       store.movieSelection.push({
-//         id: movieData.id,
-//         poster: movieData.poster_path,
-//       });
-//     }
-//     store.pageNum++;
-//   }
-// }
+const chosenArticle = (article_link, article_title) => {
+  store.specific_article = [];
+  store.specific_article.push(article_title);
+  store.specific_article.push(article_link);
+  store.get_summary(article_link);
+};
 </script>
 <template>
   <div id="background">
     <div class="item left">
       <h1 class="itemtitle">News</h1>
+      <div id="news">
+        <RouterLink
+          v-for="i in 2"
+          :to="{ name: 'Article' }"
+          @click="
+            chosenArticle(store.USnews[i - 1].link, store.USnews[i - 1].title)
+          "
+          ><h3 class="newscontent">
+            {{ store.USnews[i - 1].title }}
+          </h3></RouterLink
+        >
+        <RouterLink
+          v-for="i in 2"
+          :to="{ name: 'Article' }"
+          @click="
+            chosenArticle(store.CAnews[i - 1].link, store.CAnews[i - 1].title)
+          "
+          ><h3 class="newscontent">
+            {{ store.CAnews[i - 1].title }}
+          </h3></RouterLink
+        >
+        <RouterLink class="buttondiv" :to="{ name: 'News' }">
+          <button class="extrabutton">Extra</button>
+        </RouterLink>
+      </div>
     </div>
     <div class="item right">
       <h1 class="itemtitle">Weather</h1>
@@ -142,9 +112,9 @@ store.get_news();
 .itemtitle {
   text-align: center;
   background-color: white;
+  color: black;
   border-top-left-radius: 1rem;
   border-top-right-radius: 1rem;
-
   height: 15%;
 }
 
@@ -154,5 +124,39 @@ store.get_news();
 
 .right {
   background-color: rgb(223, 205, 41);
+}
+
+#news {
+  border: 0;
+}
+
+.newscontent {
+  color: black;
+  font-family: Philosopher;
+  font-size: 1.5rem;
+  padding-left: 3%;
+  padding-top: 3%;
+  line-height: 1.4rem;
+}
+
+.newscontent:hover {
+  color: rgb(70, 135, 189);
+  transition-duration: 0.25s;
+}
+
+.buttondiv {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 5%;
+}
+
+.extrabutton {
+  background-color: rgb(205, 122, 15);
+}
+.extrabutton:hover {
+  transition-duration: 2s;
+  background-color: rgb(223, 162, 82);
+  transform: scale(1.06);
 }
 </style>
