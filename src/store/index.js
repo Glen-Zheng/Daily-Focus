@@ -7,6 +7,7 @@ export const useStore = defineStore("store", {
       USnews: [],
       CAnews: [],
       specific_article: [],
+      todos: [],
       summary: "",
       weather: [],
       vigor: [],
@@ -18,21 +19,26 @@ export const useStore = defineStore("store", {
       let us_news = await axios.get(
         `https://newsapi.org/v2/top-headlines?country=us&apiKey=789c5ce81e9242e2b68da6537f2972f5`
       );
+      //   console.log(us_news);
       let ca_news = await axios.get(
         `https://newsapi.org/v2/top-headlines?country=ca&apiKey=789c5ce81e9242e2b68da6537f2972f5`
       );
 
       for (let element of us_news.data.articles) {
-        this.USnews.push({
-          title: element.title,
-          link: element.url,
-        });
+        if (element.title != "[Removed]") {
+          this.USnews.push({
+            title: element.title,
+            link: element.url,
+          });
+        }
       }
       for (let element of ca_news.data.articles) {
-        this.CAnews.push({
-          title: element.title,
-          link: element.url,
-        });
+        if (element.title != "[Removed]") {
+          this.CAnews.push({
+            title: element.title,
+            link: element.url,
+          });
+        }
       }
     },
     async get_weather() {
@@ -48,6 +54,7 @@ export const useStore = defineStore("store", {
       //     `https://api.openweathermap.org/data/2.5/weather?lat=43.47&lon=-80.54&appid=b0fe77d4e10a1aae089da85ab9634fd6&units=metric`
       //   );
       //↑ UW when in waterloo.
+      this.weather = [];
 
       this.weather.push({
         loc: weather.data.name,
@@ -57,13 +64,57 @@ export const useStore = defineStore("store", {
         air_quality: aq.data.list[0].main.aqi,
         //index 4 for AQI - not too reusable (since it's at this fixed index)
       });
+      console.log(this.weather);
     },
     async get_summary(url) {
+      this.summary = "";
       const response = await axios.get(
         `https://api.smmry.com/?SM_LENGTH=5&SM_URL=${url}&SM_API_KEY=5FBAF63690`
       );
       this.summary = response.data.sm_api_content;
-      console.log(response);
+      console.log("executed");
+      //   this.summary = "";
+      //   const APIcall = await axios.get(
+      //     `https://extractorapi.com/api/v1/extractor/?apikey=a720afe004a82534a9579c8b519f5f7c533a817c&url=${url}`
+      //   );
+      //   let response = APIcall.data.text;
+      //   console.log(response);
+      //   const months = [
+      //     "January",
+      //     "February",
+      //     "March",
+      //     "April",
+      //     "May",
+      //     "June",
+      //     "July",
+      //     "August",
+      //     "September",
+      //     "October",
+      //     "November",
+      //     "Dec",
+      //   ];
+      //   const d = new Date();
+      //   let month = months[d.getMonth()];
+      //   let starting_index = response.indexOf(month);
+      //   console.log(response.slice(starting_index));
+      //   let final_summary = await axios.get(
+      //     `https://api.meaningcloud.com/summarization-1.0?key=4d916a8737e2e93a6983aa0bad0045eb&sentences=5&txt=${response.slice(
+      //       starting_index
+      //     )}`
+      //   );
+      //   console.log(final_summary);
+      //   this.summary = final_summary.data.summary;
+    },
+    addToDos(list_item) {
+      if (list_item != "") {
+        if (list_item.substr(0, 1) != "•") {
+          list_item = "• " + list_item;
+          this.todos.push(list_item);
+        }
+      }
+    },
+    removeToDo(index) {
+      this.todos.splice(index, 1);
     },
   },
 });

@@ -19,7 +19,8 @@ const store = useStore();
   <!-- 5FBAF63690 -->
   <h1>{{ store.specific_article[0] }}</h1>
   <h3>Summary:</h3>
-  <p>{{ store.summary }}</p>
+  <p v-if="store.summary">{{ store.summary }}</p>
+  <p v-else>Loading Results...</p>
   <br />
   <p>link:</p>
   <a :href="`${store.specific_article[1]}`" target="_blank">LINK TO ARTICLE</a>
