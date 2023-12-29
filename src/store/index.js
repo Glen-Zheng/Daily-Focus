@@ -16,6 +16,8 @@ export const useStore = defineStore("store", {
   },
   actions: {
     async get_news() {
+      this.USnews = [];
+      this.CAnews = [];
       let us_news = await axios.get(
         `https://newsapi.org/v2/top-headlines?country=us&apiKey=789c5ce81e9242e2b68da6537f2972f5`
       );

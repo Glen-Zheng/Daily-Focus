@@ -42,7 +42,7 @@ const chosenArticle = (article_link, article_title) => {
 };
 
 let list_item = ref("");
-let todos = ref([]);
+// let todos = ref([]);
 
 const clear = () => {
   list_item.value = "";
@@ -55,12 +55,18 @@ const canEdit = () => {
 const noEdit = () => {
   edit.value = true;
 };
+
+let crossedOut = ref(false);
+const crossOut = () => {
+  crossedOut.value = !crossedOut.value;
+};
 </script>
 <template>
   <div id="background">
     <div class="item left">
       <h1 class="itemtitle">News</h1>
       <div id="news">
+        <h2 id="headlines">Top Headlines:</h2>
         <RouterLink
           v-for="i in 2"
           :to="{ name: 'Article' }"
@@ -94,7 +100,9 @@ const noEdit = () => {
         <p>Feels Like: {{ store.weather[0].feels_like }} °C</p>
         <p>Outside: {{ store.weather[0].weather }}</p>
       </div>
-      <span class="AQI">Air Quality: {{ store.weather[0].air_quality }}</span>
+      <span class="AQI"
+        >Air Quality (AQI): {{ store.weather[0].air_quality }}</span
+      >
       <span class="AQI" v-if="store.weather[0].air_quality <= 3"> (Good)</span>
       <span class="AQI" v-else-if="store.weather[0].air_quality <= 6">
         (Moderate Danger)</span
@@ -110,15 +118,15 @@ const noEdit = () => {
     <div class="item left">
       <h1 class="itemtitle">Calendar</h1>
     </div>
-    <div class="item right">
+    <div class="item right" id="todolist">
       <h1 class="itemtitle" id="list">List</h1>
       <!-- <input  type="text" class="todo" /> -->
       <!-- :readonly="isAdded" -->
       <textarea
-        placeholder="Input item... (press ENTER to add and double click to edit a todo)"
+        placeholder="Input item... (double click item to edit)"
         rows="1"
         v-model="list_item"
-        class="todo"
+        class="todoinput"
         @keyup.enter="
           store.addToDos(list_item);
           clear();
@@ -127,15 +135,16 @@ const noEdit = () => {
       <div v-for="index in store.todos.length">
         <textarea
           @dblclick="canEdit()"
-          @keyup.enter="noEdit()"
+          @keydown.enter="noEdit()"
           :readonly="edit"
           class="todo"
+          :class="{ crossed: crossedOut }"
         >
         {{ store.todos[index - 1] }}
       </textarea
         >
-
-        <button @click="store.removeToDo(index - 1)"></button>
+        <input type="checkbox" @click="crossOut()" />
+        <button @click="store.removeToDo(index - 1)" id="remove">Remove</button>
       </div>
     </div>
     <div class="item left">
@@ -188,6 +197,12 @@ const noEdit = () => {
 #music {
   grid-column: 2/3;
   grid-row: 3/4;
+}
+
+#headlines {
+  padding-left: 3px;
+  /* text-decoration: wavy; */
+  font-style: italic;
 }
 
 .item {
@@ -276,12 +291,55 @@ span {
   background-color: rgb(223, 205, 41);
   /* border-radius: 1rem; */
   margin: 0;
+  /* padding: 0; */
+  border: 0;
+  max-height: 100%;
+  resize: none;
+  overflow-y: hidden;
+  font-size: 1.3rem;
+
+  outline: none;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+}
+
+.crossed {
+  text-decoration: line-through;
+  width: 85%;
+  background-color: rgb(223, 205, 41);
+  /* border-radius: 1rem; */
+  margin: 0;
+  padding: 0;
+  border: 0;
+  max-height: 100%;
+  resize: none; /* Disable manual resizing */
+  overflow-y: hidden;
+  font-size: 1.3rem;
+
+  outline: none;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+}
+
+.todoinput {
+  width: 99%;
+  color: black;
+  background-color: rgb(223, 205, 41);
+  /* border-radius: 1rem; */
+  margin: 0;
   padding: 0;
   border: 0;
   max-height: 100%;
   resize: none; /* Disable manual resizing */
   overflow-y: hidden;
   outline: none;
+  font-size: 1.4rem;
+  padding-top: 1%;
+  padding-left: 1%;
+  /* height: 20%; */
+  overflow-wrap: normal;
 
   -webkit-box-shadow: none;
   -moz-box-shadow: none;
@@ -295,5 +353,16 @@ span {
 }
 .sizeable {
   height: scrollHeight;
+}
+
+#todolist {
+  resize: both; /* This enables resizing */
+  overflow: scroll;
+  display: inline-block; /* This prevents the div from expanding to full width */
+}
+
+#remove {
+  width: fit-content;
+  padding: 2px;
 }
 </style>

@@ -22,7 +22,7 @@ import { RouterLink } from "vue-router";
         <h3>Vigor</h3>
       </RouterLink>
       <RouterLink :to="{ name: 'Music' }" class="links">
-        <h3>Jams</h3>
+        <h3>Music</h3>
       </RouterLink>
     </div>
   </div>
