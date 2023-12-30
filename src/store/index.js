@@ -12,6 +12,8 @@ export const useStore = defineStore("store", {
       weather: [],
       vigor: [],
       music: [],
+      playlist: "",
+      playlist_photo: "",
     };
   },
   actions: {
@@ -117,6 +119,47 @@ export const useStore = defineStore("store", {
     },
     removeToDo(index) {
       this.todos.splice(index, 1);
+    },
+    async getPlaylist() {
+      this.playlist = [];
+      let response = await axios.post(
+        `https://accounts.spotify.com/api/token`,
+        "grant_type=client_credentials&client_id=4561619395264548af11249d01992dd8&client_secret=c5e69bebde7844fdab27eab71b7ed45c",
+        {
+          headers: {
+            [`Content-Type`]: `application/x-www-form-urlencoded`,
+          },
+        }
+      );
+      let spotifyToken = response.data.access_token;
+
+      //put spotify playlist ID in for the designated playlist
+      let playlist = await axios.get(
+        "https://api.spotify.com/v1/playlists/5pEnuurLXpPhGIPss0LZ75",
+        {
+          headers: {
+            [`Authorization`]: `Bearer ${spotifyToken}`,
+          },
+        }
+      );
+      this.playlist = playlist.data.name;
+      this.playlist_photo = playlist.data.images[0].url;
+      console.log();
+      console.log(playlist);
+
+      for (let track of playlist.data.tracks.items) {
+        let artists = "";
+        for (let i of track.track.artists) {
+          artists = artists + " " + i.name;
+        }
+        this.music.push({
+          name: track.track.name,
+          artist: artists,
+        });
+      }
+      console.log(this.music);
+
+      //
     },
   },
 });

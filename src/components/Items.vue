@@ -60,6 +60,8 @@ let crossedOut = ref(false);
 const crossOut = () => {
   crossedOut.value = !crossedOut.value;
 };
+
+store.getPlaylist();
 </script>
 <template>
   <div id="background">
@@ -155,6 +157,15 @@ const crossOut = () => {
     </div>
     <div class="item right">
       <h1 class="itemtitle">Music</h1>
+      <h1 id="playlistname">{{ store.playlist }}</h1>
+      <img
+        id="playlistphoto"
+        :src="`${store.playlist_photo}`"
+        alt="Playlist Photo"
+      />
+      <RouterLink :to="{ name: 'Music' }" class="buttondiv">
+        <button class="extrabutton">Play</button>
+      </RouterLink>
     </div>
   </div>
 </template>
@@ -169,6 +180,7 @@ const crossOut = () => {
   grid-template-columns: repeat(2, 1fr);
   grid-template-rows: repeat(3, 29rem);
   gap: 12px 15px;
+  padding-bottom: 10px;
 }
 
 #news {
@@ -364,5 +376,16 @@ span {
 #remove {
   width: fit-content;
   padding: 2px;
+}
+
+#playlistphoto {
+  border: 4px inset rgb(47, 232, 177);
+  height: 50%;
+  position: relative;
+  left: 34%;
+}
+#playlistname {
+  text-align: center;
+  padding-bottom: 10px;
 }
 </style>

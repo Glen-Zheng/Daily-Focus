@@ -97,8 +97,6 @@ let openTech = async () => {
 </template>
 
 <style scoped>
-#searchbar {
-}
 .newsitem {
   padding: 10px;
   color: black;
@@ -121,6 +119,8 @@ let openTech = async () => {
   font-size: 4rem;
   text-align: center;
   margin-top: 2%;
+  position: sticky;
+  top: 0;
 }
 
 #margin {
