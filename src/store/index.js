@@ -1,5 +1,7 @@
 import axios from "axios";
 import { defineStore } from "pinia";
+// import ytdl from "ytdl-core";
+// import fs from "fs/promises";
 
 export const useStore = defineStore("store", {
   state: () => {
@@ -14,6 +16,7 @@ export const useStore = defineStore("store", {
       music: [],
       playlist: "",
       playlist_photo: "",
+      songs: [],
     };
   },
   actions: {
@@ -161,5 +164,52 @@ export const useStore = defineStore("store", {
 
       //
     },
+    async fill_songs() {
+      for (let element of this.playlist) {
+        let video = await axios.get(
+          `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${
+            element.name + element.artists
+          }&key=AIzaSyDW7MeutjWPblVV1Mis0bicplRU0lRzs2U`
+        );
+
+        let video_url = video.data.items[0].id.videoId;
+        video_url = `https://www.youtube.com/watch?v=${video_url}`;
+
+        // this.songs.push(`${element.name}.mp3`);
+      }
+    },
   },
 });
+
+// /*
+
+//         // Replace 'your_video_url' with the actual YouTube video URL
+//         const videoUrl = video_url;
+
+//  const ytdlPromise = (url, options) =>
+//           new Promise((resolve, reject) => {
+//             ytdl(url, options, (err, result) => {
+//               if (err) reject(err);
+//               else resolve(result);
+//             });
+//           });
+
+//         // Download video as a readable stream
+//         const stream = await ytdlPromise(videoUrl, { filter: "audioonly" });
+
+//         // Save the audio to the assets folder
+//         const fileName = `../assets/${element.name}.mp3`;
+//         await fs.writeFile(fileName, stream);
+
+//         // Create a writable stream to save the audio
+//         // const output = await fs.createWriteStream(
+//         //   `../assets/${element.name}.mp3`
+//         // );
+
+//         this.songs.push(`../assets/${element.name}.mp3`);
+//         // Pipe the video stream to the output stream
+//         // stre am.pipe(output);
+
+//         // Listen for events
+
+// *\
