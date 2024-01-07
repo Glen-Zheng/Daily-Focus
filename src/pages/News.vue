@@ -2,8 +2,10 @@
 import { useStore } from "../store";
 import { ref } from "vue";
 import axios from "axios";
+import { RouterLink } from "vue-router";
 
 const store = useStore();
+await store.get_news();
 
 const chosenArticle = (article_link, article_title) => {
   store.specific_article = [];
@@ -59,6 +61,12 @@ let openTech = async () => {
   <!-- simple search bar + show all the main links + tech option-->
 
   <div>
+    <RouterLink id="back" :to="{ name: 'Home' }"
+      ><font-awesome-icon
+        :to="{ name: 'Home' }"
+        style="width: fit-content; cursor: pointer"
+        icon="fa-solid fa-arrow-left"
+    /></RouterLink>
     <h1 id="title">TOP News</h1>
     <label for="searchbar">Search: </label>
     <input
@@ -97,6 +105,19 @@ let openTech = async () => {
 </template>
 
 <style scoped>
+#back {
+  color: black;
+  width: 30px;
+  font-size: 3rem;
+  position: absolute;
+  top: 1%;
+  left: 1%;
+}
+#back:hover {
+  transform: scale(1.1);
+  transition-duration: 0.5s;
+}
+
 .newsitem {
   padding: 10px;
   color: black;

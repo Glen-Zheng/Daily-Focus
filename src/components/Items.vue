@@ -264,7 +264,7 @@ span {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding-top: 5%;
+  padding-top: 3%;
 }
 
 .extrabutton {

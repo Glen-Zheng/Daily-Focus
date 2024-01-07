@@ -49,17 +49,24 @@ export const useStore = defineStore("store", {
       }
     },
     async get_weather() {
-      let weather = await axios.get(
-        `https://api.openweathermap.org/data/2.5/weather?lat=43.65&lon=-79.38&appid=b0fe77d4e10a1aae089da85ab9634fd6&units=metric`
-      );
-      let aq = await axios.get(
-        `http://api.openweathermap.org/data/2.5/air_pollution?lat=43.65&lon=-79.38&appid=b0fe77d4e10a1aae089da85ab9634fd6&units=metric`
-      );
+      // let weather = await axios.get(
+      //   `https://api.openweathermap.org/data/2.5/weather?lat=43.65&lon=-79.38&appid=b0fe77d4e10a1aae089da85ab9634fd6&units=metric`
+      // );
+      // let aq = await axios.get(
+      //   `http://api.openweathermap.org/data/2.5/air_pollution?lat=43.65&lon=-79.38&appid=b0fe77d4e10a1aae089da85ab9634fd6&units=metric`
+      // );
       //Toronto
 
       //   let uw_weather = await axios.get(
       //     `https://api.openweathermap.org/data/2.5/weather?lat=43.47&lon=-80.54&appid=b0fe77d4e10a1aae089da85ab9634fd6&units=metric`
       //   );
+
+      let weather = await axios.get(
+        `https://api.openweathermap.org/data/2.5/weather?lat=43.47&lon=-80.54&appid=b0fe77d4e10a1aae089da85ab9634fd6&units=metric`
+      );
+      let aq = await axios.get(
+        `http://api.openweathermap.org/data/2.5/air_pollution?lat=43.47&lon=-80.54&appid=b0fe77d4e10a1aae089da85ab9634fd6&units=metric`
+      );
       //↑ UW when in waterloo.
       this.weather = [];
 
@@ -71,7 +78,6 @@ export const useStore = defineStore("store", {
         air_quality: aq.data.list[0].main.aqi,
         //index 4 for AQI - not too reusable (since it's at this fixed index)
       });
-      console.log(this.weather);
     },
     async get_summary(url) {
       this.summary = "";
@@ -147,20 +153,26 @@ export const useStore = defineStore("store", {
       );
       this.playlist = playlist.data.name;
       this.playlist_photo = playlist.data.images[0].url;
-      console.log();
-      console.log(playlist);
 
       for (let track of playlist.data.tracks.items) {
         let artists = "";
         for (let i of track.track.artists) {
           artists = artists + " " + i.name;
         }
+        let track_thumbnail = await axios.get(
+          `https://api.spotify.com/v1/tracks/${track.track.id}`,
+          {
+            headers: {
+              [`Authorization`]: `Bearer ${spotifyToken}`,
+            },
+          }
+        );
         this.music.push({
           name: track.track.name,
           artist: artists,
+          poster: track_thumbnail.data.album.images[0].url,
         });
       }
-      console.log(this.music);
 
       //
     },
