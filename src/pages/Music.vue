@@ -15,6 +15,7 @@ const next_song = () => {
     ++song.value;
   } else {
     errorplay.value = true;
+    song.value = 0;
   }
   console.log("Current song index:", song.value);
 };
@@ -24,6 +25,7 @@ const prev_song = () => {
     --song.value;
   } else {
     errorplay.value = true;
+    song.value = store.music.length - 1;
   }
 };
 </script>
@@ -86,14 +88,14 @@ const prev_song = () => {
 }
 .left {
   position: absolute;
-  right: 70%;
+  right: 75%;
   top: 40%;
   color: black;
 }
 
 .right {
   position: absolute;
-  left: 70%;
+  left: 75%;
   top: 40%;
   color: black;
 }
@@ -108,15 +110,17 @@ const prev_song = () => {
   text-align: center;
 }
 #poster {
+  width: 600px;
+  aspect-ratio: 1/1;
   position: relative;
-  left: calc(50% - 320px);
+  left: calc(50% - 300px);
   border-radius: 1rem;
   border: 2px inset white;
   /* right: 320px; */
 }
 #background {
   background-color: rgb(52, 85, 174);
-  height: 100vh;
+  height: 100%;
 }
 .button {
   cursor: pointer;

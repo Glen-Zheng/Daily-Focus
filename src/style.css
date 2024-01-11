@@ -59,6 +59,30 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
+::-webkit-scrollbar {
+  width: 10px;
+}
+/* Track */
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px grey;
+  border-radius: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: rgb(0, 0, 0);
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #c2adad;
+  border: 1.5px solid rgb(0, 0, 0);
+  transition-duration: 0.25s;
+}
+/* ::-webkit-scrollbar-thumb:hover {
+  border: 100px solid black;
+} */
 /* .card {
   padding: 2em;
 } */
